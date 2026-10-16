@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "manolo",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-16",
+  "workers_dev": true,
+  "assets": { "directory": "./public", "binding": "ASSETS" },
+  "ai": { "binding": "AI" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "manolo-db",
+      "database_id": "COLOQUE_AQUI_O_ID_DO_SEU_BANCO"
+    }
+  ],
+  "vars": {
+    "MODEL": "@cf/google/gemma-4-26b-a4b-it",
+    "MAX_MESSAGES_PER_HOUR": "30",
+    "MAX_GLOBAL_AI_PER_DAY": "100"
+  }
+}

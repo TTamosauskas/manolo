@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#faf9f6">
+  <meta name="description" content="Manolo, o irreverente tutor de ocultismo fundamentado nos artigos do Morte Súbita inc.">
+  <title>Manolo · Morte Súbita inc.</title>
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/chat.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="head">
+      <div class="head-persona"><img class="brand-icon" src="/gpt-icon.jpg" alt="Ícone do Manolo, um cão estilizado em preto e branco">
+        <div><h1>Manolo</h1><p>Morte Súbita inc. · Tutor de ocultismo</p></div>
+      </div>
+      <button id="reset" class="text-button" aria-label="Iniciar nova conversa" title="Nova conversa">Nova conversa</button>
+    </header>
+    <section id="feed" role="log" aria-label="Mensagens do chat" aria-live="polite" aria-relevant="additions">
+      <div class="message from-manolo"><img class="avatar" src="/gpt-icon.jpg" alt=""><div class="bubble"><strong>¡Hola, mi amigo!</strong><p>Sou Manolo, seu tutor irreverente em assuntos ocultos. Minha base de conhecimento são os artigos de <a href="https://mortesubita.net/" target="_blank" rel="noopener noreferrer">mortesubita.net</a>. Tenho também um catálogo de vídeos do Mayhem.</p><p>Escolha um modo ou faça sua pergunta.</p></div></div>
+    </section>
+    <footer class="composer-area">
+      <nav class="modes" aria-label="Modos de conversa">
+        <button data-action="teach">Ensine-me</button>
+        <button data-action="interviews">Entrevistas</button>
+        <button data-action="quiz">Teste-me</button>
+        <button data-action="free">Fazer pergunta</button>
+      </nav>
+      <form id="composer" autocomplete="off"><label class="sr-only" for="message">Sua mensagem</label><textarea id="message" name="message" rows="1" maxlength="1600" placeholder="Escreva sua pergunta..." required></textarea><button id="send" type="submit" aria-label="Enviar mensagem" title="Enviar mensagem"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form>
+      <small>Respostas baseadas no acervo de mortesubita.net. Verifique as fontes.</small>
+    </footer>
+  </main>
+</body>
+</html>
