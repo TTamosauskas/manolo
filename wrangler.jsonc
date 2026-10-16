@@ -16,6 +16,6 @@
   "vars": {
     "MODEL": "@cf/google/gemma-4-26b-a4b-it",
     "MAX_MESSAGES_PER_HOUR": "30",
-    "MAX_GLOBAL_AI_PER_DAY": "100"
+    "MAX_GLOBAL_AI_PER_DAY": "500"
   }
 }

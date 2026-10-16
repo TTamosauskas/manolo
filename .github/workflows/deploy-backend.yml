@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'src/worker.js'
+      - 'wrangler.jsonc'
 
 permissions:
   contents: write
