@@ -45,7 +45,7 @@ Abra https://github.com/TTamosauskas/manolo/actions/workflows/deploy-pages.yml, 
 
 Acesse https://ttamosauskas.github.io/manolo/.
 
-Teste Entrevistas com alquimia. Depois teste Ensine-me com hermetismo ou outro dos dez assuntos indexados inicialmente. O teste completo da IA só estará disponível quando a Cloudflare realmente aceitar a implantação.
+Teste Entrevistas com alquimia. Depois teste Ensine-me com **Quem é o Demiurgo?**: o backend pesquisa artigos públicos do Morte Súbita em tempo real e cita suas fontes. Não se limita aos dez resumos locais. O teste completo da IA só estará disponível quando a Cloudflare realmente aceitar a implantação.
 
 ## Instalador atualizado
 

@@ -15,7 +15,7 @@ function fakeDB(){
 function environment(){
  let calls=0;
  return {
-  DB:fakeDB(),ACCESS_SALT:'test-secret-not-for-production',MAX_MESSAGES_PER_HOUR:'30',MAX_GLOBAL_AI_PER_DAY:'100',
+  DB:fakeDB(),ACCESS_SALT:'test-secret-not-for-production',MAX_MESSAGES_PER_HOUR:'30',MAX_GLOBAL_AI_PER_DAY:'100',LIVE_ARTICLE_SEARCH:false,
   ASSETS:{fetch:async()=>new Response('<h1>Chat</h1>',{status:200})},
   AI:{run:async(_model,{messages})=>{
    calls++;

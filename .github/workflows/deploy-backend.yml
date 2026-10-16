@@ -97,6 +97,9 @@ jobs:
           const answer=await chat({sessionId:teach.sessionId,message:'hermetismo'});
           const explanation=(answer.message||'').split('Pesquisei no acervo de **mortesubita.net**.').pop().split('**Fontes —').shift().trim();
           if(!answer.sources?.length||explanation.length<40)throw new Error('Gemma 4 retornou explicação vazia ou sem fontes');
+          const demiurgo=await chat({message:'Quem é o Demiurgo?'});
+          if(!demiurgo.sources?.some(s=>/demiurgo/i.test(s.url))||!demiurgo.message?.includes('Fontes — mortesubita.net'))throw new Error('Busca ao vivo do WordPress não encontrou/citou artigo sobre Demiurgo');
+          console.log('Demiurgo: artigo do WordPress recuperado e resposta com fonte.');
           console.log('Fluxo D1 + Gemma 4 respondeu corretamente.');
           NODE
       - name: Atualizar a URL pública no repositório

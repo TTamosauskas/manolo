@@ -1,6 +1,6 @@
 # Manolo — Morte Súbita inc.
 
-Chat minimalista de ocultismo baseado **somente** nos artigos públicos de [mortesubita.net](https://mortesubita.net/) para perguntas, explicações e testes. O catálogo anexo `data/mayhem.txt` contém **1.544 URLs de vídeos** e é usado apenas para localizar entrevistas e conteúdos audiovisuais. A aplicação não extrai informações do conteúdo dos vídeos nem consulta outros sites para responder perguntas.
+Chat minimalista de ocultismo com **busca ao vivo no site** e respostas baseadas **somente** nos artigos públicos de [mortesubita.net](https://mortesubita.net/) para perguntas, explicações e testes. O catálogo anexo `data/mayhem.txt` contém **1.544 URLs de vídeos** e é usado apenas para localizar entrevistas e conteúdos audiovisuais. A aplicação não extrai informações do conteúdo dos vídeos nem consulta outros sites para responder perguntas.
 
 ![Logotipo Manolo](public/gpt-icon.jpg)
 
@@ -15,7 +15,7 @@ Chat minimalista de ocultismo baseado **somente** nos artigos públicos de [mort
 
 ## O que está funcionando e o que exige configuração
 
-O código, os testes locais e os **1.544 vídeos** estão preparados. A instalação inclui um **índice inicial limitado de 10 resumos de artigos verificados** (`data/seed.sql`), para permitir testar o fluxo antes da coleta mais ampla. Não afirme que dez resumos equivalem ao conteúdo completo do site. O indexador `scripts/build_index.py` precisa rodar de um computador com acesso à Internet; ele respeita `robots.txt` e não acessa nenhum domínio diferente de `mortesubita.net`. A implementação não foi testada contra uma conta real da Cloudflare neste ambiente.
+O código, os testes locais e os **1.544 vídeos** estão preparados. A instalação inclui **10 resumos locais de contingência** (`data/seed.sql`). Para Ensine-me e perguntas livres, o Worker consulta a busca pública WordPress de **mortesubita.net** em tempo real, lê trechos de até quatro artigos encontrados e cita suas URLs originais. A pesquisa verifica `robots.txt` e faz fallback aos resumos D1 quando o site não responder ou não encontrar resultados. Os dez resumos não correspondem ao acervo completo. O indexador `scripts/build_index.py` precisa rodar de um computador com acesso à Internet; ele respeita `robots.txt` e não acessa nenhum domínio diferente de `mortesubita.net`. A implementação não foi testada contra uma conta real da Cloudflare neste ambiente.
 
 A interface e as consultas poderão funcionar gratuitamente dentro dos limites de Workers AI e Workers. **Não existe garantia de uso ilimitado**. A conta deve permanecer no plano Free; o backend interrompe chamadas após o teto `MAX_GLOBAL_AI_PER_DAY`.
 
@@ -92,8 +92,8 @@ A execução remota de `wrangler dev --remote` usa recursos reais da conta; mesm
 
 ## Limitações conhecidas
 
-- O conjunto inicial tem só dez resumos. Perguntas fora dele retornarão ausência de material até a indexação maior.
-- A pesquisa é textual por FTS5. Sinônimos incomuns podem não retornar resultados até adicionar expansão de consulta.
+- A pesquisa ao vivo depende da disponibilidade da API WordPress e das regras de `robots.txt` do Morte Súbita; em indisponibilidade, o fallback D1 contém dez resumos.
+- A pesquisa ao vivo usa a busca pública do WordPress por palavras extraídas da pergunta. Sinônimos não presentes nos títulos ou no índice de busca do WordPress podem não aparecer.
 - Questões são produzidas por IA e validadas quanto ao formato, mas ainda podem exigir revisão humana quanto à exatidão pedagógica. Antes de uso educacional importante, implemente um banco editorial revisado de questões.
 - A qualidade da extração depende da estrutura HTML e das permissões do WordPress do Morte Súbita.
 - O site não é um substituto de fontes acadêmicas, médicas ou científicas. Crenças são tratadas como crenças e vinculadas a artigos.
@@ -108,3 +108,7 @@ A execução remota de `wrangler dev --remote` usa recursos reais da conta; mesm
 - [Cloudflare D1](https://developers.cloudflare.com/d1/)
 
 Código livre para personalização. Direitos dos artigos e materiais de origem permanecem com seus respectivos titulares.
+
+### Busca ao vivo de artigos (sem botão extra)
+
+A cada pergunta livre ou no modo Ensine-me, a API extrai termos relevantes da pergunta (por exemplo, `Quem é o Demiurgo?` → `demiurgo`), consulta `https://mortesubita.net/wp-json/wp/v2/search?search=demiurgo`, lê via API os textos públicos dos artigos identificados e envia trechos ao Gemma 4. Apenas URLs no domínio Morte Súbita entram nas citações. Para consulta humana, a busca equivalente é `https://mortesubita.net/?s=demiurgo`. Em caso de bloqueio ou falha, os resumos já importados no D1 continuam disponíveis. O sistema não ignora `robots.txt` nem promete acesso a páginas privadas. O modo Entrevistas continua usando apenas o catálogo de vídeos, sem IA.
