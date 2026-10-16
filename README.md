@@ -19,6 +19,17 @@ O código, os testes locais e os **1.544 vídeos** estão preparados. A instala�
 
 A interface e as consultas poderão funcionar gratuitamente dentro dos limites de Workers AI e Workers. **Não existe garantia de uso ilimitado**. A conta deve permanecer no plano Free; o backend interrompe chamadas após o teto `MAX_GLOBAL_AI_PER_DAY`.
 
+
+## GitHub Pages (interface gratuita)
+
+O workflow `.github/workflows/deploy-pages.yml` publica a pasta `public/` junto ao catálogo `data/mayhem.txt` no GitHub Pages. No repositório, vá em **Settings → Pages → Build and deployment → Source: GitHub Actions** e, em **Actions**, execute manualmente o workflow **Publicar Manolo no GitHub Pages** se ele não iniciar automaticamente.
+
+Endereço esperado após o deploy: https://ttamosauskas.github.io/manolo/
+
+**Limitação importante:** o GitHub Pages hospeda apenas os arquivos estáticos. Antes de configurar a API externa, o modo **Entrevistas** funciona por pesquisa local nos títulos de todos os 1.544 vídeos; **Ensine-me**, **Teste-me** e **Fazer pergunta** mostram um aviso claro de indisponibilidade. Não confunda a publicação da interface com a ativação da IA.
+
+Depois de instalar o backend Worker/D1, edite `public/config.js` para definir `window.MANOLO_API_URL` com a URL completa HTTPS da rota `/api/chat` do Worker; a URL é pública e não é segredo. O Worker permite o acesso CORS de `https://ttamosauskas.github.io` por padrão, alterável pela variável `PAGES_ORIGIN`. Nunca coloque chaves no JavaScript público. Um push na branch `main` publicará a mudança no Pages automaticamente se estiver habilitado.
+
 ## Implantação na Cloudflare
 
 Pré-requisitos: conta gratuita na Cloudflare, Node.js 22+, Python 3.10+, CLI Wrangler e terminal com acesso à Internet. Não é necessário comprar domínio.

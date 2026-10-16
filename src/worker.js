@@ -35,7 +35,7 @@ export function validateQuestion(q) {
   return letters.every(x=>typeof q.explanations[x]==='string' && q.explanations[x].length>8 && q.explanations[x].length<700);
 }
 function greet() {return `**${GREETINGS[Math.floor(Math.random()*GREETINGS.length)]}**`;}
-function json(data,status=200) {return Response.json(data,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}});}
+function json(data,status=200,extra={}) {return Response.json(data,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff',...extra}});}
 function trimMessage(x) {return typeof x==='string' ? x.trim().slice(0,1600) : '';}
 function sourceList(rows) {
   const seen=new Set(); const out=[];
@@ -114,22 +114,33 @@ async function reply(state,message,action,env){
 }
 export default {
  async fetch(request,env){
-  const url=new URL(request.url);if(url.pathname==='/api/health')return json({ok:true,service:'manolo'});
+  const url=new URL(request.url);
+  const origin=request.headers.get('origin');
+  const pagesOrigin=env.PAGES_ORIGIN||'https://ttamosauskas.github.io';
+  const cors=origin===pagesOrigin?{
+    'access-control-allow-origin':origin,
+    'access-control-allow-methods':'POST, OPTIONS',
+    'access-control-allow-headers':'content-type',
+    'vary':'Origin'
+  }:{};
+  const respond=(data,status=200)=>json(data,status,cors);
+  if(url.pathname==='/api/health')return respond({ok:true,service:'manolo'});
   if(url.pathname!=='/api/chat')return env.ASSETS.fetch(request);
-  if(request.method!=='POST')return json({error:'Método não permitido'},405);
-  const origin=request.headers.get('origin');if(origin&&origin!==url.origin)return json({error:'Origem não permitida'},403);
-  if(Number(request.headers.get('content-length')||0)>10000)return json({error:'Mensagem muito grande'},413);
-  if(!env.ACCESS_SALT)return json({error:'Configuração incompleta: ACCESS_SALT ausente'},503);
+  if(origin&&origin!==url.origin&&origin!==pagesOrigin)return respond({error:'Origem não permitida'},403);
+  if(request.method==='OPTIONS')return new Response(null,{status:204,headers:cors});
+  if(request.method!=='POST')return respond({error:'Método não permitido'},405);
+  if(Number(request.headers.get('content-length')||0)>10000)return respond({error:'Mensagem muito grande'},413);
+  if(!env.ACCESS_SALT)return respond({error:'Configuração incompleta: ACCESS_SALT ausente'},503);
   try {
-   const body=await request.json();if(!body||typeof body!=='object')return json({error:'Requisição inválida'},400);
+   const body=await request.json();if(!body||typeof body!=='object')return respond({error:'Requisição inválida'},400);
    const message=trimMessage(body.message);const action=typeof body.action==='string'?body.action:'';
-   if(!message&&!MODES.has(action)&&action!=='reset')return json({error:'Escolha um modo ou envie uma mensagem'},400);
+   if(!message&&!MODES.has(action)&&action!=='reset')return respond({error:'Escolha um modo ou envie uma mensagem'},400);
    const visitor=await hashIp(request.headers.get('cf-connecting-ip')||'local',env.ACCESS_SALT);
    const hour=new Date().toISOString().slice(0,13);
-   if(!await rateLimit(env.DB,`visitor:${visitor}`,hour,Number(env.MAX_MESSAGES_PER_HOUR||30)))return json({error:'Limite de mensagens por hora atingido. Tente novamente mais tarde.'},429);
+   if(!await rateLimit(env.DB,`visitor:${visitor}`,hour,Number(env.MAX_MESSAGES_PER_HOUR||30)))return respond({error:'Limite de mensagens por hora atingido. Tente novamente mais tarde.'},429);
    const id=isUUID(body.sessionId)?body.sessionId:crypto.randomUUID();const state=(await sessionGet(env.DB,id))||baseSession();
    const result=await reply(state,message,action,env);await sessionSave(env.DB,id,result.state);
-   return json({sessionId:id,message:result.message,sources:result.sources||[],mode:result.state.mode});
-  }catch(err){console.error('Manolo error',err);return json({error:'Não foi possível completar a operação. Confira as migrações, a indexação e a disponibilidade do serviço.'},503);}
+   return respond({sessionId:id,message:result.message,sources:result.sources||[],mode:result.state.mode});
+  }catch(err){console.error('Manolo error',err);return respond({error:'Não foi possível completar a operação. Confira as migrações, a indexação e a disponibilidade do serviço.'},503);}
  }
 };
