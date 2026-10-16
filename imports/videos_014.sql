@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('1ptmnstB8pA','A Verdadeira Vontade é só metade do Caminho - Marcelo Del Debbio','https://www.youtube.com/watch?v=1ptmnstB8pA') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('4LGufyHSJrs','Luciferianismo - Frater Amoriel','https://www.youtube.com/watch?v=4LGufyHSJrs') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('9ELsf4Nreh0','A Mandala Astrológica - Alex Alprim','https://www.youtube.com/watch?v=9ELsf4Nreh0') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('S3hEDvz7HfU','Aurum Solis, Teurgia e He
 INSERT INTO videos(id,title,url) VALUES('jgP3eaizSAM','Keepers of the Keys: Art, Crafts and Magic - Carrie Mikell Leitch','https://www.youtube.com/watch?v=jgP3eaizSAM') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('mpQG-tYYFtM','Arte, Literatura e Psicologia: O Tarot Interminável - Joao Caldeira','https://www.youtube.com/watch?v=mpQG-tYYFtM') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('sk2dmBAfypI','Ayahuasca - Cristian Dornelles','https://www.youtube.com/watch?v=sk2dmBAfypI') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

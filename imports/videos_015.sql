@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('WTW6ExQg2KE','Projeto Mayhem 026 - Quais as Diferenças entre o Tarot e o Baralho de Lenormand?','https://www.youtube.com/watch?v=WTW6ExQg2KE') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('Kd97o7khQkk','A Metasistemática do Caos - Fausto Ramos','https://www.youtube.com/watch?v=Kd97o7khQkk') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('8n4aW1Ze2CM','Ecclesia Gnostica Universalis in Anglia - Marco Visconti','https://www.youtube.com/watch?v=8n4aW1Ze2CM&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('9OSE_Q8FazM','Qual a diferença entre o
 INSERT INTO videos(id,title,url) VALUES('Eh3xbqJEaF0','Magia e Video-Games. Quando a Alquimia encontra a jogabilidade - Caio Ribeiro Chagas','https://www.youtube.com/watch?v=Eh3xbqJEaF0') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('m0W72vZhlhc','Como Harmonizar as Egrégoras que um Mago decide participar? - Raph Arrais','https://www.youtube.com/watch?v=m0W72vZhlhc') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('n0PNPo3EuQc','Qual a Diferença entre Umbanda e Quimbanda? - Franz Meier','https://www.youtube.com/watch?v=n0PNPo3EuQc') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

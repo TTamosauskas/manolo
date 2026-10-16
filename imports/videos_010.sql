@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('N49q4ihAYb8','Conselho para aqueles que estão iniciando na Magia ou na Bruxaria - Karagan Griffith','https://www.youtube.com/watch?v=N49q4ihAYb8') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('hW9EdSmnXpA','A Divulgação da Espiritualidade na Web - Acid0 (Saindo da Matrix)','https://www.youtube.com/watch?v=hW9EdSmnXpA') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('fJoB_VFTd7g','O Catimbó - Boteco do Mayhem','https://www.youtube.com/watch?v=fJoB_VFTd7g&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('B1QGXK1WFHY','O Grimorio de Arbatel - B
 INSERT INTO videos(id,title,url) VALUES('5I7YVx5a2Nw','O que é Magia? - Karagan Griffith (Wicca Tradicional Alexandrina)','https://www.youtube.com/watch?v=5I7YVx5a2Nw') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('NYdMdrKpN8c','Bate-Papo Mayhem 182 - Taoísmo e Visão do Mistério - Com Chiu Yi Chih','https://www.youtube.com/watch?v=NYdMdrKpN8c') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('Ec9_9l3YLO4','A diferença entre o estudo da Magia antes e depois da Internet - Vinicius Rosa','https://www.youtube.com/watch?v=Ec9_9l3YLO4') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

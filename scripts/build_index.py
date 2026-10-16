@@ -160,7 +160,7 @@ def write_sql(prefix, statements, every=100):
     files=[]
     for start in range(0,len(statements),every):
         file=output/f'{prefix}_{start//every+1:03d}.sql'
-        file.write_text('BEGIN TRANSACTION;\n'+'\n'.join(statements[start:start+every])+'\nCOMMIT;\n',encoding='utf-8')
+        file.write_text('\n'.join(statements[start:start+every])+'\n',encoding='utf-8')
         files.append(file)
     return files
 

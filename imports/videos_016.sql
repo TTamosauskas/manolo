@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('vWx4sDm8Lvk','A História das Artes Marciais na China - Marco Antônio Seschi','https://www.youtube.com/watch?v=vWx4sDm8Lvk') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('250OsMJeZRI','Quais os Elementos de um Altar Pessoal ? - Marcelo Del Debbio','https://www.youtube.com/watch?v=250OsMJeZRI') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('7ZE_jA2LuHs','Bate-Papo Mayhem 019 - Tai Chi, Chi Kung, Kung Fu - Paralelos entre treino de Artes Marciais e Estud','https://www.youtube.com/watch?v=7ZE_jA2LuHs') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -43,4 +42,3 @@ INSERT INTO videos(id,title,url) VALUES('x182spFXaHU','Palestra Kabbalah e os De
 INSERT INTO videos(id,title,url) VALUES('VvOx9xg8BXw','Brasileiros Notáveis - Marcelo Del Debbio','https://www.youtube.com/watch?v=VvOx9xg8BXw') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('3xkIv5G6mM8','Homenagem a Rubens Saraceni','https://www.youtube.com/watch?v=3xkIv5G6mM8') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('_9kq9srE_2s','O Louco no Tarot de Rider-Waite e Thoth','https://www.youtube.com/watch?v=_9kq9srE_2s') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

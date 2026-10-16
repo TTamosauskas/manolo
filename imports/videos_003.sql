@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('J63C4d8fWgY','A Mecânica Celestial da Astrologia - Nando Guimarães','https://www.youtube.com/watch?v=J63C4d8fWgY') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('TzmmLX_NbwI','PRATICANDO A MAGIA GRIMORIAL COMO TEM QUE SER | #robsonbelli #botecodomayhem #magiaangelical','https://www.youtube.com/watch?v=TzmmLX_NbwI') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('wTTLsOp_qC0','ANJOS DESTRUINDO E MATANDO EM NOME DE DEUS... TÁ NA BÍBLIA! | #robsonbelli #botecodomayhem','https://www.youtube.com/watch?v=wTTLsOp_qC0') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('nvB5e5SN5XA','O Tarot de Rider Waite - 
 INSERT INTO videos(id,title,url) VALUES('vREBtcyS-oo','As Verdadeiras Linhagens dentro do Ocultismo - Boteco do Mayhem','https://www.youtube.com/watch?v=vREBtcyS-oo') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('s9wWVm-keyk','A POLÊMICA NUMEROLOGIA PITAGÓRICA - MARCELO DEL DEBBIO E CARLOS CONTE NO CONSCIÊNCIA PRÓSPERA','https://www.youtube.com/watch?v=s9wWVm-keyk&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('s070IfWn6U4','AS VIRTUDES DIVINAS E O LIVRE-ARBÍTRIO - MARCELO DEL DEBBIO E CARLOS CONTE NO CONSCIÊNCIA PRÓSPERA','https://www.youtube.com/watch?v=s070IfWn6U4') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

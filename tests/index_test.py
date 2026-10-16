@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
-from build_index import allowed,chunks,PageParser,literal
+from build_index import allowed,chunks,PageParser,literal,write_sql,ROOT
 
 class IndexTests(unittest.TestCase):
     def test_allowlist(self):
@@ -20,6 +20,24 @@ class IndexTests(unittest.TestCase):
         parts=list(chunks('Texto sobre hermetismo. '*200))
         self.assertGreater(len(parts),1)
         self.assertLessEqual(max(map(len,parts)),1450)
+    def test_remote_sql_files_have_no_explicit_transactions(self):
+        # Wrangler D1 executa cada arquivo em uma transação própria.
+        import re
+        base = Path(__file__).resolve().parents[1]
+        files = [base / 'data' / 'seed.sql', *sorted((base / 'imports').glob('videos_*.sql'))]
+        self.assertEqual(len(files), 17)
+        for path in files:
+            sql = path.read_text(encoding='utf-8')
+            self.assertNotRegex(sql, r'(?im)^\s*(?:BEGIN(?:\s+TRANSACTION)?|COMMIT|SAVEPOINT|RELEASE)\s*;')
+            self.assertIn('INSERT INTO ', sql)
+    def test_sql_generator_excludes_transaction_wrappers(self):
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as dirname:
+            with patch('build_index.ROOT', Path(dirname)):
+                files=write_sql('fixture', ["INSERT INTO example VALUES (1);"])
+                self.assertEqual(len(files),1)
+                self.assertEqual(files[0].read_text(encoding='utf-8'),"INSERT INTO example VALUES (1);\n")
     def test_escape(self):
         self.assertEqual(literal("Autor d'Água"),"'Autor d''Água'")
 

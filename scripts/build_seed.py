@@ -26,11 +26,9 @@ SEEDS = [
   'O artigo de Thiago Tamosauskas investiga as implicações éticas do hermetismo e pergunta quais virtudes podem orientar a conduta do hermetista para além de rituais, teurgia e investigações intelectuais. Propõe examinar ensinamentos de textos atribuídos a Hermes Trismegisto e suas possíveis consequências morais. Entre os temas levantados aparecem o trabalho individual para adquirir sabedoria, a interconexão das coisas e a crença em uma dimensão espiritual da realidade. O assunto tratado é a reflexão ética de uma tradição, e não uma norma moral universal.'),
 ]
 
-sql=['BEGIN TRANSACTION;']
+sql=[]
 for url,title,description in SEEDS:
-    sql.append(f'INSERT INTO articles(url,title,indexed_at) VALUES({literal(url)},{literal(title)},CURRENT_TIMESTAMP) ON CONFLICT(url) DO UPDATE SET title=excluded.title,indexed_at=CURRENT_TIMESTAMP;')
-    sql.append(f'DELETE FROM article_chunks WHERE article_id=(SELECT id FROM articles WHERE url={literal(url)});')
+    sql.append(f'INSERT INTO articles(url,title,indexed_at) VALUES({literal(url)},{literal(title)},CURRENT_TIMESTAMP) ON CONFLICT(url) DO NOTHING;')
     for n,part in enumerate(chunks(description)):
-        sql.append(f'INSERT INTO article_chunks(article_id,title,body,ordinal) VALUES((SELECT id FROM articles WHERE url={literal(url)}),{literal(title)},{literal(part)},{n});')
-sql.append('COMMIT;')
+        sql.append(f'INSERT INTO article_chunks(article_id,title,body,ordinal) VALUES((SELECT id FROM articles WHERE url={literal(url)}),{literal(title)},{literal(part)},{n}) ON CONFLICT(article_id,ordinal) DO NOTHING;')
 p=(ROOT/'data'/'seed.sql');p.write_text('\n'.join(sql)+'\n',encoding='utf-8');print(len(SEEDS),'fontes iniciais =>',p)

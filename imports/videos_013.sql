@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('rZG4yDRLX4Y','O Que é Sincronicidade? - Tiago Mazzon','https://www.youtube.com/watch?v=rZG4yDRLX4Y') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('8KiTXZIn0p4','Runas, Thelema e Bruxaria - Germânia Gonçalves','https://www.youtube.com/watch?v=8KiTXZIn0p4') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('KMaXWsBSBOA','Como saber qual das várias versões de uma Mitologia é a Verdadeira? - Leonardo Tremeschim','https://www.youtube.com/watch?v=KMaXWsBSBOA') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('jpdzTDE9Fxk','A Maçonaria Mista - Hele
 INSERT INTO videos(id,title,url) VALUES('6FMOKEnjigQ','A Importância do Amor nas práticas do Sefirat ha Omer - Raph Arrais','https://www.youtube.com/watch?v=6FMOKEnjigQ&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('Z5SxvYnzbIY','A Ordem dos Cavaleiros de Malta - Paulo Fonseca','https://www.youtube.com/watch?v=Z5SxvYnzbIY') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('epSzq428QVM','Qual é a origem da Magia do Caos? - Luis Z. Siqueira','https://www.youtube.com/watch?v=epSzq428QVM') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

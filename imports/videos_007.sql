@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('-gElm6SZjS0','Símbolos Ocultistas no Senhor dos Anéis - Florindo Peixoto','https://www.youtube.com/watch?v=-gElm6SZjS0') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('vnfKI61JfNU','As Regras do Clube da Luta e a Magia - Boteco do Mayhem','https://www.youtube.com/watch?v=vnfKI61JfNU') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('QShwe2x_V4Y','A Anatomia Oculta da Alquimia - Talles Menegon','https://www.youtube.com/watch?v=QShwe2x_V4Y&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('AABK1faO9sI','Bate-Papo Mayhem 303 - O 
 INSERT INTO videos(id,title,url) VALUES('wlnpCECgDiU','O que é Verdadeira Vontade? - Marcelo Del Debbio','https://www.youtube.com/watch?v=wlnpCECgDiU') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('4zbpCvEIkXA','O Simposio Brasileiro de Hermetismo está de volta! - Boteco do Mayhem','https://www.youtube.com/watch?v=4zbpCvEIkXA') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('GnWDsE4QGn8','Poesia Lovecraftiana, Poemas de Horror Cósmico - Cid Vale Ferreira','https://www.youtube.com/watch?v=GnWDsE4QGn8') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

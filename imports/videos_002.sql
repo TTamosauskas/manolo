@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('0bU3M6apPss','É POSSÍVEL TRABALHAR COM TODOS OS PORTÕES? E TRABALHAR COMO ORÁCULO? | #marcelodeldebbio #yairalon','https://www.youtube.com/watch?v=0bU3M6apPss') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('tSFLYuoDXTI','Iniciação e Auto-Iniciação na Bruxaria Moderna - Lua Serena','https://www.youtube.com/watch?v=tSFLYuoDXTI') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('yO59ks3RM2Q','O CIRCULO DA VIDA ASSOCIADO AOS 231 PORTÕES | #marcelodeldebbio #yairalon','https://www.youtube.com/watch?v=yO59ks3RM2Q') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('K7-8XcWE2iI','O ORIXÁ QUE REGE O ODU �
 INSERT INTO videos(id,title,url) VALUES('dzHnjGwkLKs','COMO FUNCIONA A "ASTROLOGIA" DOS ODUS? | #diegodeoxossi #odusdenascimento','https://www.youtube.com/watch?v=dzHnjGwkLKs') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('FiquV3204oc','O QUE SÃO OS ODUS DE NASCIMENTO E COMO ELES AFETAM A SUA VIDA? | #diegodeoxossi #odusdenascimento','https://www.youtube.com/watch?v=FiquV3204oc') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('EA0RjNay_U8','O Livro de Thoth - Johann Heyss e Rogerio Bettoni','https://www.youtube.com/watch?v=EA0RjNay_U8') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

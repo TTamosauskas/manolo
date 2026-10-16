@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('Oi--Mdf2SqI','Bate-Papo Mayhem 301 - Os Arquivos Secretos do Vaticano - Odir Fontoura','https://www.youtube.com/watch?v=Oi--Mdf2SqI') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('u5ew1NNKxH0','Filosofia e Misticismo Indiano - Guilherme Romano','https://www.youtube.com/watch?v=u5ew1NNKxH0') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('j-DiHBkv7FQ','A Jornada do Herói dentro do Hermetismo - Boteco do Mayhem','https://www.youtube.com/watch?v=j-DiHBkv7FQ') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('dwamCOD1w1M','Tarot e Desenvolvimento P
 INSERT INTO videos(id,title,url) VALUES('hcBjrkpNbWE','Entendendo a Alquimia: Da Matéria à Alma - Marcus Cezar Rabello','https://www.youtube.com/watch?v=hcBjrkpNbWE') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('8jxceyt5xcc','Mediunidade: Conversa com Espíritos ou Esquizofrenia? - Boteco do Mayhem','https://www.youtube.com/watch?v=8jxceyt5xcc') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('3ioKBnFMXtk','Bate-Papo Mayhem 252 - Uma Visão Acadêmica sobre Thelema - Com Beatriz Parisi','https://www.youtube.com/watch?v=3ioKBnFMXtk') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

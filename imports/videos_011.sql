@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('f-7DD6ZRyNA','Os Diferentes tipos de Golpes dentro do Ocultismo - Gilberto Strapazon','https://www.youtube.com/watch?v=f-7DD6ZRyNA&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('hl25eKBae9M','Kundalini Yoga - Boteco do Mayhem','https://www.youtube.com/watch?v=hl25eKBae9M') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('mGUqjHqpyx0','Diferentes tipos de Exu na Quimbanda - Franz Meier','https://www.youtube.com/watch?v=mGUqjHqpyx0&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('TQJFooju3j0','O que é necessário para
 INSERT INTO videos(id,title,url) VALUES('NKXOFlgSklQ','Qual a diferença entre ler Tarot para si mesmo e ler para os outros? - Liz do Tarot','https://www.youtube.com/watch?v=NKXOFlgSklQ') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('FNZqA_bEzFo','A Quimica Oculta - João Sebastião','https://www.youtube.com/watch?v=FNZqA_bEzFo') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('TKaRRDLbeC0','Quais os Três Testes Iniciáticos para se entrar na Maçonaria? - Carlos Brasilio Conte','https://www.youtube.com/watch?v=TKaRRDLbeC0&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

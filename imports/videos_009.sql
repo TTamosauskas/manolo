@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('4jJ1O55b1zI','Educação e Ocultismo: A Teoria e a Prática - Rodrigo Elutark','https://www.youtube.com/watch?v=4jJ1O55b1zI') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('awfNhR2wSog','A Árvore da Vida na Prática - Aula de Marcelo Del Debbio','https://www.youtube.com/watch?v=awfNhR2wSog') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('ePqeDpO0TD8','Deusas obscuras e o Sagrado Feminino - Ana Clara Sitara','https://www.youtube.com/watch?v=ePqeDpO0TD8&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('Cq7Bfs6DoFk','Sonhos e Alquimia - Botec
 INSERT INTO videos(id,title,url) VALUES('e8s9194WRrI','Bate-Papo Mayhem 213 - A Magia do Fogo - Com Marco Vazquez','https://www.youtube.com/watch?v=e8s9194WRrI') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('WjI2r8sg2sQ','Projeção Astral e o Mundo Espiritual - Wagner Borges','https://www.youtube.com/watch?v=WjI2r8sg2sQ') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('2CTu6GP4hAY','Tarot e Astrologia - Boteco do Mayhem','https://www.youtube.com/watch?v=2CTu6GP4hAY') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

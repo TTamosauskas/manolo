@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('bsd0xfiKSbQ','O que é a Tradição Ogdoádica? - Victor Canongia','https://www.youtube.com/watch?v=bsd0xfiKSbQ') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('j5ctRkxZViY','Como falar com o Consulente quando a Leitura do tarô mostra um desastre? - João Caldeira','https://www.youtube.com/watch?v=j5ctRkxZViY') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('Yhsgu0uj8us','Magos Cristãos: a História da Magia no Cristianismo - Pedro Costa','https://www.youtube.com/watch?v=Yhsgu0uj8us') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('FiNRgEjqjNg','Qual a origem das lendas 
 INSERT INTO videos(id,title,url) VALUES('uc7lhoHPISo','Martinismo - Aluisio Cabianca','https://www.youtube.com/watch?v=uc7lhoHPISo') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('MDGXATAazp0','As Imagens dos Arcanos afetam o tipo de leitura dentro do Tarot? - Aton Gondim','https://www.youtube.com/watch?v=MDGXATAazp0') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('R6Wp1jusw54','Diários Mágicos - Boteco do Mayhem','https://www.youtube.com/watch?v=R6Wp1jusw54') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

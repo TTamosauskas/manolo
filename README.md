@@ -20,6 +20,8 @@ O código, os testes locais e os **1.544 vídeos** estão preparados. A instala�
 A interface e as consultas poderão funcionar gratuitamente dentro dos limites de Workers AI e Workers. **Não existe garantia de uso ilimitado**. A conta deve permanecer no plano Free; o backend interrompe chamadas após o teto `MAX_GLOBAL_AI_PER_DAY`.
 
 
+**Correção de importação D1:** os arquivos SQL não contêm BEGIN/COMMIT explícitos; o Wrangler controla a transação ao executar o arquivo remotamente. Reexecute o instalador se a versão anterior falhou ao importar os artigos.
+
 **Sem computador:** siga o guia [Ativar pelo celular](ATIVAR-NO-CELULAR.md) para implantar banco, IA e backend pelo GitHub Actions.
 
 ## GitHub Pages (interface gratuita)

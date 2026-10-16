@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('RuNpdfpgmh0','Breviario Maçônico para o Século XXI  - Kennyo Ismail','https://www.youtube.com/watch?v=RuNpdfpgmh0') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('PoTPKlBoSpA','O Livro dos Mortos e a Árvore da Vida - Marcelo Del Debbio','https://www.youtube.com/watch?v=PoTPKlBoSpA') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('6xEwR_Tuzms','DOIS PRÍNCIPES NIGERIANOS NO SHOW DO IRA! NO MORUMBI???','https://www.youtube.com/watch?v=6xEwR_Tuzms') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('zgWJKHydni4','O MISTÉRIO E A EVOLUÇÃ
 INSERT INTO videos(id,title,url) VALUES('RHVpbY2iKyY','O PONTO DE VIRADA! | #projetomayhem #bruxaria','https://www.youtube.com/watch?v=RHVpbY2iKyY') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('ZGet1xHB_UY','O PROCESSO DE ESCRITA DE UM BRUXO TRADICIONAL | #projetomayhem #bruxaria','https://www.youtube.com/watch?v=ZGet1xHB_UY') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('3oillbmkzrk','APRENDENDO BRUXARIA ENQUANTO COMIA HÓSTIA! | #projetomayhem #bruxaria','https://www.youtube.com/watch?v=3oillbmkzrk&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

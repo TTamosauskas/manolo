@@ -47,6 +47,10 @@ Acesse https://ttamosauskas.github.io/manolo/.
 
 Teste Entrevistas com alquimia. Depois teste Ensine-me com hermetismo ou outro dos dez assuntos indexados inicialmente. O teste completo da IA só estará disponível quando a Cloudflare realmente aceitar a implantação.
 
+## Instalador atualizado
+
+Se a primeira tentativa passou da autenticação e das migrações, mas falhou com mensagem sobre BEGIN TRANSACTION, reexecute depois de atualizar o repositório: os arquivos SQL foram corrigidos e o banco será reutilizado automaticamente. Não é necessário emitir um novo token.
+
 ## Se ocorrer erro
 
 - Segredos ausentes: revise os nomes exatos do passo 3.

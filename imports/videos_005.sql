@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('v0Pa0euNdng','A VERDADE HISTÓRICA SOBRE A IGREJA - MARCELO DEL DEBBIO NO FALA GLAUBER PODCAST','https://www.youtube.com/watch?v=v0Pa0euNdng') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('QjC-6Br81_M','SERIAM OS ALIENS ANJOS CAÍDOS??? - MARCELO DEL DEBBIO NO FALA GLAUBER PODCAST','https://www.youtube.com/watch?v=QjC-6Br81_M') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('30IKBoasnOM','O LADO SOMBRIO DA MAÇONARIA: MITOS E FATOS - MARCELO DEL DEBBIO NO FALA GLAUBER PODCAST','https://www.youtube.com/watch?v=30IKBoasnOM') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('nI6Gs0Q4Wv0','Wicca Gardineriana - Wesl
 INSERT INTO videos(id,title,url) VALUES('dg4KM9eeXq4','O Tarot do Fim do Mundo - Elisa Riemer','https://www.youtube.com/watch?v=dg4KM9eeXq4') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('qRiadkeSckg','O Culto a Santa Muerte - Sebastien de la Croix','https://www.youtube.com/watch?v=qRiadkeSckg') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('z8wT-Jxcv6U','Numerologia - Boteco do Mayhem','https://www.youtube.com/watch?v=z8wT-Jxcv6U') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

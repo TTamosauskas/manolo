@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('WndIO16PoOg','Financiamento Coletivo - Astrologia Hermética e Teurgia','https://www.youtube.com/watch?v=WndIO16PoOg') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('q53kHiSnf1U','Os 72 Nomes de Deus e a Astrologia - Boteco do Mayhem','https://www.youtube.com/watch?v=q53kHiSnf1U') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('HhmshxpYkrs','O Tarot do Fim do Mundo - Boteco do Mayhem','https://www.youtube.com/watch?v=HhmshxpYkrs') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('q-guHQzFDnM','Os Oito deuses Primordiai
 INSERT INTO videos(id,title,url) VALUES('nL0GH0697Vc','Bibliomancia, Os Livros Oráculos - Boteco do Mayhem','https://www.youtube.com/watch?v=nL0GH0697Vc&pp=0gcJCYUJAYcqIYzv') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('A3byCMW0FuE','Os Números, a Música e a Magia - Luan Unelmoija','https://www.youtube.com/watch?v=A3byCMW0FuE') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('WEClr-d0zRg','Existe Choque de Egrégoras? - Boteco do Mayhem','https://www.youtube.com/watch?v=WEClr-d0zRg') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;

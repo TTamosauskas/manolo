@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO videos(id,title,url) VALUES('UXYizNX_w1Q','O NÚMERO 7 NAS CULTURAS E RELIGIÕES - MARCELO DEL DEBBIO E CARLOS CONTE NO CONSCIÊNCIA PRÓSPERA','https://www.youtube.com/watch?v=UXYizNX_w1Q') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('J05gf06IeO0','A MAÇONARIA E A ESCOLA PITAGÓRICA - MARCELO DEL DEBBIO E CARLOS CONTE NO CONSCIÊNCIA PRÓSPERA','https://www.youtube.com/watch?v=J05gf06IeO0') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('63vP6rx06Dg','VAMOS ENTENDER O MISTÉRIO DO DÍZIMO? - MARCELO DEL DEBBIO E CARLOS CONTE NO CONSCIÊNCIA PRÓSPERA','https://www.youtube.com/watch?v=63vP6rx06Dg') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
@@ -99,4 +98,3 @@ INSERT INTO videos(id,title,url) VALUES('zNPi4dGswh4','COMO O MAPA REVELA SUAS V
 INSERT INTO videos(id,title,url) VALUES('MC55gaIj2pU','A MAÇONARIA É UMA COISA SÓ? - MARCELO DEL DEBBIO NO FALA GLAUBER PODCAST','https://www.youtube.com/watch?v=MC55gaIj2pU') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('SX7A0oS2e44','HÁ MAÇONARIA QUE ACEITA MULHERES? - MARCELO DEL DEBBIO NO FALA GLAUBER PODCAST','https://www.youtube.com/watch?v=SX7A0oS2e44') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
 INSERT INTO videos(id,title,url) VALUES('cmpnPS8hJwE','COMO ALGUÉM CHEGA AO GRAU 33 DA MAÇONARIA? - MARCELO DEL DEBBIO NO FALA GLAUBER PODCAST','https://www.youtube.com/watch?v=cmpnPS8hJwE') ON CONFLICT(id) DO UPDATE SET title=excluded.title,url=excluded.url;
-COMMIT;
