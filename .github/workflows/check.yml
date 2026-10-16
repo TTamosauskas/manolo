@@ -1,0 +1,39 @@
+name: Verificar Manolo
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  teste:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - name: Testar backend e instalação sem acessar a Cloudflare
+        run: npm test
+      - name: Testar extrator de artigos
+        run: python -m unittest discover -s tests -p '*test.py' -v
+      - name: Validar importação SQL repetida
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import sqlite3
+          db=sqlite3.connect(':memory:')
+          db.executescript(Path('migrations/0001_init.sql').read_text())
+          sql=Path('data/seed.sql').read_text()
+          db.executescript(sql)
+          db.executescript(sql)
+          assert db.execute('SELECT count(*) FROM article_chunks').fetchone()[0]==10
+          for p in sorted(Path('imports').glob('videos_*.sql')):
+              db.executescript(p.read_text())
+          assert db.execute('SELECT count(*) FROM videos').fetchone()[0]==1544
+          assert db.execute("SELECT count(*) FROM video_fts WHERE video_fts MATCH 'alquimia'").fetchone()[0]>0
+          print('SQL, catálogo e reimportação validados')
+          PY
