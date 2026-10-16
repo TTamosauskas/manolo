@@ -75,7 +75,7 @@ async function newQuizQuestion(env,difficulty){const source=await anyArticle(env
 }
 function printQuestion(q,number,difficulty){return `**Questão ${number}/3 — dificuldade ${difficulty}/5**\n\n${q.question}\n\n${q.options.map((x,i)=>`${'ABCDE'[i]}) ${x}`).join('\n')}\n\nResponda A, B, C, D ou E.`;}
 async function reply(state,message,action,env){
- if(action==='reset'){return {state:baseSession(),message:`${greet()}\n\nSou Manolo, tutor da Morte Súbita inc. Minha fonte é **mortesubita.net**. Escolha **Ensine-me**, **Entrevistas**, **Teste-me** ou **Fazer pergunta**.`,sources:[]};}
+ if(action==='reset'){return {state:baseSession(),message:`**¡Hola, mi amigo!**\n\nSou Manolo, seu tutor em assuntos ocultos. Minha base de conhecimento são os livros antigos em domínio público e os mais recentes artigos de mortesubita.net.\n\nEscolha um modo ou faça sua pergunta.`,sources:[]};}
  if(action && MODES.has(action)){
   state=baseSession();state.mode=action;
   if(action==='teach'||action==='interviews'||action==='free'){state.waiting=true;return {state,message:`${greet()}\n\n${action==='interviews'?'Tenho um catálogo de entrevistas e vídeos do projeto Mayhem. Qual tema você deseja assistir?':action==='teach'?'Qual assunto do ocultismo você quer aprender? Vou pesquisar no acervo de **mortesubita.net**.':'Qual sua dúvida? Vou consultar exclusivamente os artigos de **mortesubita.net**.'}`,sources:[]};}
@@ -89,7 +89,7 @@ async function reply(state,message,action,env){
   const found=await searchVideos(env.DB,state.topic,state.videoOffset);
   if(!found.items.length)return {state,message:`${greet()}\n\nNão encontrei mais vídeos catalogados sobre **${state.topic.replace(/[<>]/g,'').slice(0,120)}**. Você pode tentar outro tema.`,sources:[]};
   const list=found.items.map(v=>`- [${v.title.replace(/[\[\]]/g,'')}](${v.url})`).join('\n');
-  return {state,message:`${greet()}\n\nEncontrei estes registros no catálogo de vídeos do Mayhem para **${state.topic.replace(/[<>]/g,'').slice(0,120)}**:\n\n${list}${found.more?'\n\nEscreva **mais** para ver os próximos.':''}\n\n*Os títulos não equivalem a transcrições dos vídeos.*`,sources:[]};
+  return {state,message:`${greet()}\n\nEncontrei estes registros no catálogo de vídeos do Mayhem para **${state.topic.replace(/[<>]/g,'').slice(0,120)}**:\n\n${list}${found.more?'\n\nEscreva **mais** para ver os próximos.':''}`,sources:[]};
  }
  if(state.mode==='quiz'){
   const quiz=state.quiz;if(!quiz?.active)return {state,message:`${greet()}\n\nComece um novo teste no botão Teste-me.`,sources:[]};

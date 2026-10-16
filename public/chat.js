@@ -45,7 +45,7 @@ async function offlineChat(message='',action=''){
         offline.matches=(strict.length?strict:ranked).sort((a,b)=>b.score-a.score||a.title.localeCompare(b.title,'pt-BR'));
       }else offline.offset+=12;
       const page=offline.matches.slice(offline.offset,offline.offset+12);
-      answer=page.length?'**¡Órale, compadre!**\n\nVídeos do catálogo Mayhem sobre **'+offline.topic+'**:\n\n'+page.map(v=>'- ['+v.title.replace(/[\[\]]/g,'')+']('+v.url+')').join('\n')+(offline.matches.length>offline.offset+12?'\n\nEscreva **mais** para ver os próximos.':'')+'\n\n*Esta lista foi encontrada pelos títulos; não contém transcrições.*':'**¡Ay, caramba!**\n\nNão encontrei outros vídeos sobre **'+offline.topic+'** no catálogo. Você pode tentar outro termo.';
+      answer=page.length?'**¡Órale, compadre!**\n\nVídeos do catálogo Mayhem sobre **'+offline.topic+'**:\n\n'+page.map(v=>'- ['+v.title.replace(/[\[\]]/g,'')+']('+v.url+')').join('\n')+(offline.matches.length>offline.offset+12?'\n\nEscreva **mais** para ver os próximos.':''):'**¡Ay, caramba!**\n\nNão encontrei outros vídeos sobre **'+offline.topic+'** no catálogo. Você pode tentar outro termo.';
     }
     formatReplace(placeholder,answer);
   }catch(err){
@@ -81,7 +81,7 @@ function append(role,message,error=false){
 }
 function persist(){const items=[...feed.querySelectorAll('.message')].slice(-60).map(el=>({role:el.classList.contains('from-user')?'user':'assistant',text:el.querySelector('.bubble')?.dataset?.raw||''})).filter(x=>x.text);try{localStorage.setItem(store,JSON.stringify({sessionId,activeMode,items}));}catch{}}
 function setRaw(el,raw){el.querySelector('.bubble').dataset.raw=raw;persist();}
-function load(){try{const state=JSON.parse(localStorage.getItem(store)||'null');if(!state||!Array.isArray(state.items)||!state.items.length)return;sessionId=state.sessionId||null;activeMode=state.activeMode||'home';feed.innerHTML='';for(const m of state.items.slice(-60)){if(typeof m.text==='string'){const el=append(m.role==='user'?'user':'assistant',m.text);setRaw(el,m.text);}}setMode(activeMode);}catch{}}
+function load(){try{const state=JSON.parse(localStorage.getItem(store)||'null');if(!state||!Array.isArray(state.items)||!state.items.length)return;sessionId=state.sessionId||null;activeMode=state.activeMode||'home';feed.innerHTML=welcome;for(const m of state.items.slice(-60)){if(typeof m.text==='string'){const el=append(m.role==='user'?'user':'assistant',m.text);setRaw(el,m.text);}}setMode(activeMode);}catch{}}
 function setMode(mode){activeMode=mode;for(const b of modes)b.setAttribute('aria-pressed',String(b.dataset.action===mode));}
 function busy(value){pending=value;send.disabled=value;input.disabled=value;for(const b of modes)b.disabled=value;document.querySelector('#reset').disabled=value;}
 async function request(message='',action=''){

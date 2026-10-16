@@ -67,3 +67,25 @@ test('Modelo vazio: mensagem clara ao invés de resposta sem conteúdo',async()=
  assert.equal(r.status,200);
  assert.match(r.message,/não retornou uma explicação/);
 });
+
+test('Abertura do chat e reset usam sempre a mensagem inicial solicitada',async()=>{
+ const html=fs.readFileSync('public/index.html','utf8');
+ const initial='Sou Manolo, seu tutor em assuntos ocultos. Minha base de conhecimento são os livros antigos em domínio público e os mais recentes artigos de mortesubita.net.';
+ assert.ok(html.includes('<strong>¡Hola, mi amigo!</strong>'));
+ assert.ok(html.includes(initial));
+ assert.ok(html.includes('Escolha um modo ou faça sua pergunta.'));
+ const env=environment();
+ const r=await chat(env,{action:'reset'});
+ assert.equal(r.status,200);
+ assert.equal(r.message,`**¡Hola, mi amigo!**\n\n${initial}\n\nEscolha um modo ou faça sua pergunta.`);
+});
+test('Entrevistas não incluem aviso sobre títulos e transcrições',async()=>{
+ const env=environment();
+ const start=await chat(env,{action:'interviews'});
+ const answer=await chat(env,{sessionId:start.sessionId,message:'alquimia'});
+ assert.equal(answer.status,200);
+ assert.match(answer.message,/youtube\.com/);
+ assert.doesNotMatch(answer.message,/transcriç|transcri[cç]/i);
+ const frontend=fs.readFileSync('public/chat.js','utf8');
+ assert.doesNotMatch(frontend,/não contém transcrições|não equivalem a transcrições/i);
+});
