@@ -59,3 +59,38 @@ jobs:
             }catch(e){console.log(JSON.stringify({path,error:String(e)}));}
           }
           NODE
+      - name: Verificar busca pública permitida do Morte Súbita (somente diagnóstico)
+        shell: bash
+        run: |
+          python - <<'PY'
+          import urllib.request, urllib.error, urllib.parse, urllib.robotparser
+          import json
+          host='https://mortesubita.net'
+          ua='ManoloResearchBot/1.0 (+https://github.com/TTamosauskas/manolo; respects robots.txt)'
+          robots=urllib.robotparser.RobotFileParser()
+          try:
+              req=urllib.request.Request(host+'/robots.txt',headers={'User-Agent':ua})
+              with urllib.request.urlopen(req,timeout=12) as r:
+                  data=r.read(25000).decode('utf-8','replace')
+                  print('robots status',r.status,'bytes',len(data));print('robots directives',data[:1800])
+              robots.parse(data.splitlines())
+          except Exception as e:
+              print('robots unavailable',type(e).__name__,str(e)[:200])
+              raise SystemExit(0)
+          paths=['/wp-json/wp/v2/search?search=demiurgo&per_page=3','/wp-json/wp/v2/posts?search=demiurgo&per_page=3&_fields=link,title,content,excerpt','/?s=demiurgo','/a-origem-e-a-evolucao-do-demiurgo/']
+          for path in paths:
+              u=host+path
+              if not robots.can_fetch(ua,u):
+                  print('ROBOTS DISALLOWED',path);continue
+              try:
+                  req=urllib.request.Request(u,headers={'User-Agent':ua,'Accept':'application/json,text/html;q=0.8'})
+                  with urllib.request.urlopen(req,timeout=18) as r:
+                      content=r.read(150000)
+                      print('FETCH',path,'status',r.status,'ctype',r.headers.get('content-type'),'bytes',len(content),'final',r.url)
+                      if 'json' in (r.headers.get('content-type') or ''):
+                          parsed=json.loads(content)
+                          print('JSON',str([{k:v for k,v in x.items() if k in ('id','title','url','link')} for x in parsed[:3]])[:1000] if isinstance(parsed,list) else str(parsed)[:300])
+                      else:
+                          print('HTML title',content[:180].decode('utf-8','replace'))
+              except Exception as e: print('FETCH ERROR',path,type(e).__name__,str(e)[:180])
+          PY
