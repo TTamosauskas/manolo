@@ -40,3 +40,23 @@ test('Backend: valida domínio e resposta de saúde',async()=>{
   assert.equal(count,2);
   assert.match(readFileSync(path,'utf8'),/manolo.exemplo.workers.dev\/api\/chat/);
 });
+
+test('Backend: revalida CORS após propagação do secret put',async()=>{
+  const path=join(mkdtempSync(join(tmpdir(),'manolo-')),'config.js');
+  let calls=0;
+  const request=async(_,opts)=>{
+    calls++;
+    if(opts?.method==='OPTIONS'){
+      if(calls===2)return {status:403,headers:new Headers()};
+      return {status:204,headers:new Headers({'access-control-allow-origin':'https://ttamosauskas.github.io'})};
+    }
+    return {ok:true,status:200,json:async()=>({ok:true,service:'manolo'})};
+  };
+  const previousSetTimeout=globalThis.setTimeout;
+  try{
+    globalThis.setTimeout=(cb)=>{cb();return 0};
+    await finish({log:'Deployed https://manolo.exemplo.workers.dev',request,configPath:path,summaryPath:null});
+  }finally{globalThis.setTimeout=previousSetTimeout;}
+  assert.equal(calls,4);
+  assert.match(readFileSync(path,'utf8'),/\/api\/chat/);
+});

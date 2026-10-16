@@ -1,2 +1,2 @@
-/* URL publica do Worker, sem chaves. Ex.: https://manolo.conta.workers.dev/api/chat */
-window.MANOLO_API_URL = '';
+// URL pública do Worker verificada em 16/10/2026; não contém tokens.
+window.MANOLO_API_URL = 'https://manolo.mvividvs.workers.dev/api/chat';

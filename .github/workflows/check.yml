@@ -59,3 +59,23 @@ jobs:
             }catch(e){console.log(JSON.stringify({path,error:String(e)}));}
           }
           NODE
+      - name: Testar catálogo e uma resposta de IA do Worker publicado
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const url='https://manolo.mvividvs.workers.dev/api/chat';
+          async function chat(payload){
+            const response=await fetch(url,{method:'POST',headers:{'content-type':'application/json','origin':'https://ttamosauskas.github.io'},body:JSON.stringify(payload),signal:AbortSignal.timeout(45000)});
+            let data;try{data=await response.json()}catch{data={error:'Corpo não é JSON'}}
+            console.log(JSON.stringify({action:payload.action||'message',status:response.status,mode:data.mode,message:(data.message||'').slice(0,190),error:data.error||null,sources:data.sources?.length||0}));
+            if(response.status!==200||data.error)throw new Error('API retornou erro no modo '+(payload.action||'mensagem'));
+            return data;
+          }
+          const interview=await chat({action:'interviews'});
+          const video=await chat({sessionId:interview.sessionId,message:'alquimia'});
+          if(!video.message?.includes('youtube.com'))throw new Error('Catálogo D1 não encontrou vídeos de alquimia');
+          const teach=await chat({action:'teach'});
+          const answer=await chat({sessionId:teach.sessionId,message:'hermetismo'});
+          if(!answer.message?.includes('mortesubita.net'))throw new Error('Resposta didática não citou a origem dos artigos');
+          console.log('Fluxo D1 + Gemma 4 respondeu corretamente.');
+          NODE
