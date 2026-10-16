@@ -50,3 +50,20 @@ test('Controle de origem e ausência de segredo',async()=>{
  const r=await chat(env,{message:'Olá'});assert.equal(r.status,503);
  const response=await handler.fetch(new Request('https://chat.example/api/chat',{method:'POST',headers:{Origin:'https://example.evil','Content-Type':'application/json'},body:'{"message":"x"}'}),environment());assert.equal(response.status,403);
 });
+
+test('Gemma 4: configura geração sem modo thinking',async()=>{
+ const env=environment();
+ let input;
+ env.AI.run=async(_model,params)=>{input=params;return {response:'Uma explicação real baseada no artigo original.'};};
+ const r=await chat(env,{message:'hermetismo'});
+ assert.equal(r.status,200);
+ assert.equal(input.chat_template_kwargs.enable_thinking,false);
+});
+
+test('Modelo vazio: mensagem clara ao invés de resposta sem conteúdo',async()=>{
+ const env=environment();
+ env.AI.run=async()=>({response:''});
+ const r=await chat(env,{message:'hermetismo'});
+ assert.equal(r.status,200);
+ assert.match(r.message,/não retornou uma explicação/);
+});
