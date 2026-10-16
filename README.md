@@ -20,6 +20,8 @@ O código, os testes locais e os **1.544 vídeos** estão preparados. A instala�
 A interface e as consultas poderão funcionar gratuitamente dentro dos limites de Workers AI e Workers. **Não existe garantia de uso ilimitado**. A conta deve permanecer no plano Free; o backend interrompe chamadas após o teto `MAX_GLOBAL_AI_PER_DAY`.
 
 
+**Sem computador:** siga o guia [Ativar pelo celular](ATIVAR-NO-CELULAR.md) para implantar banco, IA e backend pelo GitHub Actions.
+
 ## GitHub Pages (interface gratuita)
 
 O workflow `.github/workflows/deploy-pages.yml` publica a pasta `public/` junto ao catálogo `data/mayhem.txt` no GitHub Pages. No repositório, vá em **Settings → Pages → Build and deployment → Source: GitHub Actions** e, em **Actions**, execute manualmente o workflow **Publicar Manolo no GitHub Pages** se ele não iniciar automaticamente.
