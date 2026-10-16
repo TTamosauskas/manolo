@@ -37,3 +37,25 @@ jobs:
           assert db.execute("SELECT count(*) FROM video_fts WHERE video_fts MATCH 'alquimia'").fetchone()[0]>0
           print('SQL, catálogo e reimportação validados')
           PY
+      - name: Diagnosticar preflight HTTPS publico do Worker (sem segredos)
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const base='https://manolo.mvividvs.workers.dev';
+          const cases=[
+            ['/api/health',{method:'GET'}],
+            ['/api/chat',{method:'OPTIONS',headers:{Origin:'https://ttamosauskas.github.io','Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'content-type'}}],
+            ['/api/chat',{method:'OPTIONS'}],
+            ['/api/chat',{method:'GET',headers:{Origin:'https://ttamosauskas.github.io'}}],
+          ];
+          for(const [path,config] of cases){
+            try{
+              const response=await fetch(base+path,{...config,signal:AbortSignal.timeout(12000)});
+              const allowed=response.headers.get('access-control-allow-origin');
+              const methods=response.headers.get('access-control-allow-methods');
+              const type=response.headers.get('content-type');
+              const text=(await response.text()).slice(0,500);
+              console.log(JSON.stringify({path,method:config.method,status:response.status,allowOrigin:allowed,allowMethods:methods,contentType:type,body:text}));
+            }catch(e){console.log(JSON.stringify({path,error:String(e)}));}
+          }
+          NODE
