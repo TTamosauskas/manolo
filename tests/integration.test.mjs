@@ -89,3 +89,14 @@ test('Entrevistas não incluem aviso sobre títulos e transcrições',async()=>{
  const frontend=fs.readFileSync('public/chat.js','utf8');
  assert.doesNotMatch(frontend,/não contém transcrições|não equivalem a transcrições/i);
 });
+
+test('Pergunta livre direta e explicação sem preâmbulo de pesquisa',async()=>{
+ const env=environment();
+ let r=await chat(env,{action:'free'});
+ assert.match(r.message,/Qual sua dúvida\?/);
+ assert.doesNotMatch(r.message,/Vou consultar exclusivamente/);
+ r=await chat(env,{sessionId:r.sessionId,message:'O que são sigilos?'});
+ assert.equal(r.status,200);
+ assert.doesNotMatch(r.message,/Pesquisei no acervo de/);
+ assert.match(r.message,/Fontes — mortesubita.net/);
+});

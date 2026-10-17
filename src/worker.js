@@ -44,7 +44,7 @@ function sourceList(rows) {
   return out;
 }
 function citeSources(sources) {return sources.length?'\n\n**Fontes — mortesubita.net:**\n'+sources.map(s=>`- [${s.title.replace(/[\[\]]/g,'')}](${s.url})`).join('\n'):'';}
-function fromArchive(text,sources) {return `${greet()}\n\nPesquisei no acervo de **mortesubita.net**.\n\n${safeModelText(text)}${citeSources(sources)}`;}
+function fromArchive(text,sources) {return `${greet()}\n\n${safeModelText(text)}${citeSources(sources)}`;}
 function baseSession() {return {mode:'home',waiting:false,topic:'',suggestions:[],videoOffset:0,quiz:null};}
 function isUUID(x){return typeof x==='string' && /^[a-f0-9-]{36}$/i.test(x);}
 async function sessionGet(db,id){if(!isUUID(id))return null;const r=await db.prepare('SELECT payload FROM sessions WHERE id=? AND expires_at>?').bind(id,Math.floor(Date.now()/1000)).first();if(!r)return null;try{return JSON.parse(r.payload);}catch{return null;}}
@@ -78,7 +78,7 @@ async function reply(state,message,action,env){
  if(action==='reset'){return {state:baseSession(),message:`**¡Hola, mi amigo!**\n\nSou Manolo, seu tutor em assuntos ocultos. Minha base de conhecimento são os livros antigos em domínio público e os mais recentes artigos de mortesubita.net.\n\nEscolha um modo ou faça sua pergunta.`,sources:[]};}
  if(action && MODES.has(action)){
   state=baseSession();state.mode=action;
-  if(action==='teach'||action==='interviews'||action==='free'){state.waiting=true;return {state,message:`${greet()}\n\n${action==='interviews'?'Tenho um catálogo de entrevistas e vídeos do projeto Mayhem. Qual tema você deseja assistir?':action==='teach'?'Qual assunto do ocultismo você quer aprender? Vou pesquisar no acervo de **mortesubita.net**.':'Qual sua dúvida? Vou consultar exclusivamente os artigos de **mortesubita.net**.'}`,sources:[]};}
+  if(action==='teach'||action==='interviews'||action==='free'){state.waiting=true;return {state,message:`${greet()}\n\n${action==='interviews'?'Tenho um catálogo de entrevistas e vídeos do projeto Mayhem. Qual tema você deseja assistir?':action==='teach'?'Qual assunto do ocultismo você quer aprender? Vou pesquisar no acervo de **mortesubita.net**.':'Qual sua dúvida?'}`,sources:[]};}
   const q=await newQuizQuestion(env,3);if(q.error)return {state,message:`${greet()}\n\n${q.error}`,sources:[]};state.quiz={index:1,difficulty:3,hits:0,active:q,readings:[]};return {state,message:`${greet()}\n\nPesquisei no acervo de **mortesubita.net** para preparar a pergunta.\n\n${printQuestion(q,1,3)}`,sources:[{title:q.title,url:q.url}]};
  }
  if(state.mode==='home')state.mode='free'; // Qualquer pergunta digitada inicia o modo livre.
