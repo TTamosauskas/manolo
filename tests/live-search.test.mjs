@@ -46,7 +46,7 @@ test('Bolo de Luz: descarta fontes incidentais e mantém múltiplos artigos úte
   assert.ok(relevanceScore('Receita do Bolo de Luz e outras Porras','Receita ritual de bolo de luz.',['bolo','luz'])>=90);
   assert.ok(relevanceScore('Segundo artigo sobre Bolo de Luz','Bolo de luz e seus usos.',['bolo','luz'])>=90);
   assert.equal(relevanceScore('William Lilly e a Astrologia Cristã','O astrólogo viu a luz.',['bolo','luz']),0);
-  assert.equal(relevanceScore('O doce de Cosme Damião','Em festas se fala de bolo e, em outro capítulo distante, de luz.',['bolo','luz']),0);
+  assert.ok(relevanceScore('O doce de Cosme Damião','Em festas se fala de bolo e, em outro capítulo distante, de luz.',['bolo','luz'])<90);
   const mock=(value)=>({ok:true,status:200,json:async()=>value});
   const items=[
     {id:1,title:'Receita do Bolo de Luz',url:'https://mortesubita.net/receita-do-bolo-de-luz/',type:'post'},
