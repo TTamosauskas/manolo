@@ -38,10 +38,7 @@ export function relevanceScore(title,body,words){
   if(!words.length)return 0;
   const titleText=normalized(title),bodyText=normalized(body);
   if(words.length===1)return matchesWord(titleText,words[0])?100:matchesWord(bodyText,words[0])?25:0;
-  const phrase=words.map(w=>w.replace(/[.*+?^$()|[\]{}]/g,'\\function containsRelevant(text,words){
-  const norm=String(text||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-  return words.some(w=>norm.includes(w));
-}')).join('(?:[^a-z0-9]+[a-z0-9]{1,5}){0,2}[^a-z0-9]+');
+  const phrase=words.join('(?:[^a-z0-9]+[a-z0-9]{1,5}){0,2}[^a-z0-9]+');
   const phrasePattern=new RegExp('(^|[^a-z0-9])'+phrase+'([^a-z0-9]|$)');
   const titleCount=words.filter(w=>matchesWord(titleText,w)).length;
   const textCount=words.filter(w=>matchesWord(bodyText,w)).length;

@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'src/worker.js'
+      - 'src/live-search.js'
       - 'wrangler.jsonc'
 
 permissions:
