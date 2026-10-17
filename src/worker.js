@@ -1,9 +1,9 @@
-import {liveArticles,searchWords} from './live-search.js';
+import {liveArticles,searchWords,surpriseArticle} from './live-search.js';
 /* Manolo: todas as fontes factuais vêm de artigos previamente indexados de mortesubita.net.
    A IA nunca recebe acesso a um navegador ou ferramenta de busca irrestrita. */
 export const MODEL = '@cf/google/gemma-4-26b-a4b-it';
 const GREETINGS = ['¡Órale, compadre!', '¡Hola, mi amigo!', '¡Ándale, amigo!', '¡Ay, caramba!'];
-const MODES = new Set(['teach', 'interviews', 'quiz', 'free']);
+const MODES = new Set(['teach', 'interviews', 'quiz', 'free', 'surprise']);
 const VIDEO_PAGE = 12;
 const SOURCES_LIMIT = 4;
 
@@ -78,6 +78,19 @@ async function reply(state,message,action,env){
  if(action==='reset'){return {state:baseSession(),message:`**¡Hola, mi amigo!**\n\nSou Manolo, seu tutor em assuntos ocultos. Minha base de conhecimento são os livros antigos em domínio público e os mais recentes artigos de mortesubita.net.\n\nEscolha um modo ou faça sua pergunta.`,sources:[]};}
  if(action && MODES.has(action)){
   state=baseSession();state.mode=action;
+  if(action==='surprise'){
+    const found=env.LIVE_ARTICLE_SEARCH===false?{row:null,status:'disabled'}:await surpriseArticle({request:env.LIVE_ARTICLE_FETCH||fetch});
+    const article=found.row||await anyArticle(env.DB);
+    if(!article)return {state:baseSession(),message:`${greet()}\n\nNão consegui encontrar um artigo público para surpreender você agora. Tente novamente.`,sources:[]};
+    state.suggestions=[];
+    state.topic=article.title;
+    const result=await explain(env,'Apresente uma descoberta interessante a partir deste artigo: '+article.title,[article],false);
+    if(result.error)return {state:baseSession(),message:`${greet()}\n\n${result.error}`,sources:[]};
+    state.mode='free';
+    const sources=sourceList([article]);
+    const note=found.row?'':'\n\n*O site não respondeu; usei um artigo indexado localmente.*';
+    return {state,message:`${greet()}\n\n**Surpreenda-me: ${article.title.replace(/[\\[\\]]/g,'')}**\n\n${result.answer}${citeSources(sources)}${note}\n\nQuer descobrir outra coisa? Toque em **Surpreenda-me** novamente.`,sources};
+  }
   if(action==='teach'||action==='interviews'||action==='free'){state.waiting=true;return {state,message:`${greet()}\n\n${action==='interviews'?'Tenho um catálogo de entrevistas e vídeos do projeto Mayhem. Qual tema você deseja assistir?':action==='teach'?'Qual assunto do ocultismo você quer aprender? Vou pesquisar no acervo de **mortesubita.net**.':'Qual sua dúvida?'}`,sources:[]};}
   const q=await newQuizQuestion(env,3);if(q.error)return {state,message:`${greet()}\n\n${q.error}`,sources:[]};state.quiz={index:1,difficulty:3,hits:0,active:q,readings:[]};return {state,message:`${greet()}\n\nPesquisei no acervo de **mortesubita.net** para preparar a pergunta.\n\n${printQuestion(q,1,3)}`,sources:[{title:q.title,url:q.url}]};
  }

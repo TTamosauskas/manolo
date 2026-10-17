@@ -100,3 +100,18 @@ test('Pergunta livre direta e explicação sem preâmbulo de pesquisa',async()=>
  assert.doesNotMatch(r.message,/Pesquisei no acervo de/);
  assert.match(r.message,/Fontes — mortesubita.net/);
 });
+
+test('Surpreenda-me usa IA e cita artigo encontrado',async()=>{
+ const env=environment();
+ const before=env.calls;
+ const answer=await chat(env,{action:'surprise'});
+ assert.equal(answer.status,200);
+ assert.equal(answer.mode,'free');
+ assert.match(answer.message,/Surpreenda-me:/);
+ assert.match(answer.message,/Fontes — mortesubita.net/);
+ assert.equal(answer.sources.length,1);
+ assert.equal(env.calls,before+1);
+ assert.ok(answer.sources[0].url.startsWith('https://mortesubita.net/'));
+ const markup=fs.readFileSync('public/index.html','utf8');
+ assert.match(markup,/data-action="surprise">Surpreenda-me/);
+});

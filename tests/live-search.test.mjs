@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {searchWords,textFromWordPress,robotsPermits,relevanceScore,liveArticles} from '../src/live-search.js';
+import {searchWords,textFromWordPress,robotsPermits,relevanceScore,liveArticles,surpriseArticle} from '../src/live-search.js';
 
 test('usa a palavra importante de uma pergunta',()=>{
   assert.deepEqual(searchWords('Quem é o Demiurgo?'),['demiurgo']);
@@ -75,4 +75,27 @@ test('Bolo de Luz: descarta fontes incidentais e mantém múltiplos artigos úte
 test('Demiurgo: aceita várias fontes realmente pertinentes',()=>{
   assert.ok(relevanceScore('Yaldabaoth, o Demiurgo no Gnosticismo','', ['demiurgo'])>0);
   assert.ok(relevanceScore('A Origem e a Evolução do Demiurgo','', ['demiurgo'])>0);
+});
+
+test('Surpreenda-me seleciona artigo WordPress com fonte validada',async()=>{
+ const mock=(items,pages)=>({ok:true,headers:{get:()=>String(pages)},json:async()=>items});
+ const urls=[];
+ const request=async url=>{
+   urls.push(url);
+   const page=Number(new URL(url).searchParams.get('page'));
+   if(page===1)return mock([{status:'publish',link:'https://mortesubita.net/artigo-a/',title:{rendered:'Artigo A'},content:{rendered:'Conteúdo histórico de ocultismo. '.repeat(20)}}],9);
+   if(page===5)return mock([{status:'publish',link:'https://mortesubita.net/artigo-b/',title:{rendered:'Artigo B'},content:{rendered:'Tradição esotérica e estudos simbólicos. '.repeat(20)}}],9);
+   throw Error('unexpected page');
+ };
+ const r=await surpriseArticle({request,checkRobots:false,random:()=>0.5});
+ assert.equal(r.status,'ok');
+ assert.equal(r.row.title,'Artigo B');
+ assert.equal(r.row.url,'https://mortesubita.net/artigo-b/');
+ assert.ok(urls.every(x=>x.startsWith('https://mortesubita.net/')));
+ const fallback=await surpriseArticle({request,checkRobots:false,random:()=>0.5,exclude:['https://mortesubita.net/artigo-b/']});
+ assert.equal(fallback.status,'empty');
+});
+test('Surpreenda-me rejeita URL externa e falha sem acesso público',async()=>{
+ const request=async()=>({ok:true,headers:{get:()=>1},json:async()=>[{status:'publish',link:'https://site-externo.example/',title:{rendered:'Artigo Externo'},content:{rendered:'Texto qualquer. '.repeat(30)}}]});
+ assert.equal((await surpriseArticle({request,checkRobots:false,random:()=>0})).status,'empty');
 });

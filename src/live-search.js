@@ -153,3 +153,36 @@ export async function liveArticles(question,{request=fetch,checkRobots=true}={})
     return {rows:[],status:'unavailable'};
   }
 }
+
+export async function surpriseArticle({request=fetch,checkRobots=true,random=Math.random,exclude=[]}={}){
+  const path='/wp-json/wp/v2/posts';
+  try{
+    if(checkRobots){
+      const rules=await permitted(request);
+      if(!robotsPermits(rules,path))return {row:null,status:'disallowed'};
+    }
+    const endpoint=page=>HOST+path+'?per_page=1&page='+page+'&_fields=id,link,title,content,status';
+    const initial=await remote(request,endpoint(1));
+    const pages=Number(initial.headers?.get?.('x-wp-totalpages')||1);
+    if(!Number.isSafeInteger(pages)||pages<1||pages>1000000)throw new Error('Paginação inesperada');
+    const seen=new Set(exclude);
+    const selected=[];
+    const candidates=[1+Math.floor(Math.min(0.999999,Math.max(0,random()))*pages)];
+    for(let i=0;i<5;i++)candidates.push(1+Math.floor(Math.min(0.999999,Math.max(0,random()))*pages));
+    for(const page of [...new Set(candidates)]){
+      const response=page===1?initial:await remote(request,endpoint(page));
+      const items=await response.json();
+      if(!Array.isArray(items))continue;
+      const post=items[0];
+      const title=decodeHtml(post?.title?.rendered||'').replace(/<[^>]+>/g,'').trim();
+      const url=post?.link;
+      const body=textFromWordPress(post?.content?.rendered||'');
+      if(post?.status!=='publish'||!safeArticleUrl(url)||title.length<5||body.length<350||seen.has(url))continue;
+      return {row:{title,url,body:body.slice(0,4500)},status:'ok'};
+    }
+    return {row:null,status:'empty'};
+  }catch(error){
+    console.warn('Surpresa Morte Súbita unavailable:',String(error).slice(0,160));
+    return {row:null,status:'unavailable'};
+  }
+}
