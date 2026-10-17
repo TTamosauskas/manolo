@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {searchWords,textFromWordPress,robotsPermits,liveArticles} from '../src/live-search.js';
+import {searchWords,textFromWordPress,robotsPermits,relevanceScore,liveArticles} from '../src/live-search.js';
 
 test('usa a palavra importante de uma pergunta',()=>{
   assert.deepEqual(searchWords('Quem é o Demiurgo?'),['demiurgo']);
@@ -39,4 +39,40 @@ test('busca ao vivo pelo termo e obtém texto + URLs sem buscar domínios extern
 test('WordPress indisponível informa falha para permitir fallback local',async()=>{
   const r=await liveArticles('Demiurgo',{checkRobots:false,request:async()=>{throw Error('timeout')}});
   assert.equal(r.status,'unavailable');assert.deepEqual(r.rows,[]);
+});
+
+test('Bolo de Luz: descarta fontes incidentais e mantém múltiplos artigos úteis',async()=>{
+  assert.deepEqual(searchWords('O que é o bolinho de luz?'),['bolo','luz']);
+  assert.ok(relevanceScore('Receita do Bolo de Luz e outras Porras','Receita ritual de bolo de luz.',['bolo','luz'])>=90);
+  assert.ok(relevanceScore('Segundo artigo sobre Bolo de Luz','Bolo de luz e seus usos.',['bolo','luz'])>=90);
+  assert.equal(relevanceScore('William Lilly e a Astrologia Cristã','O astrólogo viu a luz.',['bolo','luz']),0);
+  assert.equal(relevanceScore('O doce de Cosme Damião','Em festas se fala de bolo e, em outro capítulo distante, de luz.',['bolo','luz']),0);
+  const mock=(value)=>({ok:true,status:200,json:async()=>value});
+  const items=[
+    {id:1,title:'Receita do Bolo de Luz',url:'https://mortesubita.net/receita-do-bolo-de-luz/',type:'post'},
+    {id:2,title:'Bolo de Luz na Missa Gnóstica',url:'https://mortesubita.net/bolo-de-luz-na-missa-gnostica/',type:'post'},
+    {id:3,title:'William Lilly e a Astrologia Cristã',url:'https://mortesubita.net/william-lilly/',type:'post'},
+    {id:4,title:'O doce de Cosme Damião',url:'https://mortesubita.net/o-doce/',type:'post'}
+  ];
+  const bodies={
+    1:'<p>Receita ritual do Bolo de Luz para tradições thelemitas e suas aplicações.</p>'.repeat(7),
+    2:'<p>O Bolo de Luz é utilizado em celebrações de distintas tradições mágicas.</p>'.repeat(7),
+    3:'<p>William Lilly estudou astrologia cristã na Inglaterra em muitos textos históricos.</p>'.repeat(7),
+    4:'<p>O bolo faz parte das tradições festivas e doações. Outras festividades ocorrem sob a luz do sol.</p>'.repeat(7)
+  };
+  const request=async url=>{
+    if(url.includes('/search?'))return mock(items);
+    const id=Number(url.match(/\/posts\/(\d+)/)?.[1]);
+    const item=items.find(i=>i.id===id);
+    if(item)return mock({status:'publish',link:item.url,title:{rendered:item.title},content:{rendered:bodies[id]}});
+    throw Error('unexpected '+url);
+  };
+  const result=await liveArticles('O que é o bolinho de luz?',{request,checkRobots:false});
+  assert.equal(result.status,'ok');
+  assert.equal(result.rows.length,2);
+  assert.deepEqual(result.rows.map(x=>x.url),items.slice(0,2).map(x=>x.url));
+});
+test('Demiurgo: aceita várias fontes realmente pertinentes',()=>{
+  assert.ok(relevanceScore('Yaldabaoth, o Demiurgo no Gnosticismo','', ['demiurgo'])>0);
+  assert.ok(relevanceScore('A Origem e a Evolução do Demiurgo','', ['demiurgo'])>0);
 });

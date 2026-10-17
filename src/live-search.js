@@ -5,7 +5,7 @@ const AGENT='ManoloResearchBot/1.0 (+https://github.com/TTamosauskas/manolo; res
 const STOP=new Set(['quem','qual','quais','como','onde','quando','porque','porquê','sobre','para','quero','pode','voce','você','saber','diga','fale','explique','esse','essa','isto','aquilo','ele','ela','isso','dos','das','com','uma','uns','nos','nas','está','ser','mais','sao','são','que','qual','seu','minha','isso','site','morte','súbita','subita','artigos']);
 let cachedRules=null;
 export function searchWords(question){
-  return [...new Set(String(question||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().match(/[a-z0-9]{3,}/g)||[])].filter(x=>!STOP.has(x)).slice(0,5);
+  return [...new Set((String(question||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().match(/[a-z0-9]{3,}/g)||[]).map(x=>x.length>6&&x.endsWith('inho')?x.slice(0,-4)+'o':x))].filter(x=>!STOP.has(x)).slice(0,5);
 }
 export function decodeHtml(text){
   const names={amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",nbsp:' ',hellip:'…',mdash:'—',ndash:'–',ldquo:'“',rdquo:'”',lsquo:'‘',rsquo:'’',aacute:'á',agrave:'à',atilde:'ã',acirc:'â',eacute:'é',ecirc:'ê',iacute:'í',oacute:'ó',otilde:'õ',ocirc:'ô',uacute:'ú',ccedil:'ç'};
@@ -32,9 +32,33 @@ export function textFromWordPress(html){
 function safeArticleUrl(value){
   try{const u=new URL(value);return u.protocol==='https:'&&(u.hostname==='mortesubita.net'||u.hostname==='www.mortesubita.net')&&!u.username&&!u.password;}catch{return false;}
 }
-function containsRelevant(text,words){
+function normalized(text){return String(text||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
+function matchesWord(text,word){return new RegExp('(^|[^a-z0-9])'+word+'([^a-z0-9]|$)').test(text);}
+export function relevanceScore(title,body,words){
+  if(!words.length)return 0;
+  const titleText=normalized(title),bodyText=normalized(body);
+  if(words.length===1)return matchesWord(titleText,words[0])?100:matchesWord(bodyText,words[0])?25:0;
+  const phrase=words.map(w=>w.replace(/[.*+?^$()|[\]{}]/g,'\\function containsRelevant(text,words){
   const norm=String(text||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   return words.some(w=>norm.includes(w));
+}')).join('(?:[^a-z0-9]+[a-z0-9]{1,5}){0,2}[^a-z0-9]+');
+  const phrasePattern=new RegExp('(^|[^a-z0-9])'+phrase+'([^a-z0-9]|$)');
+  const titleCount=words.filter(w=>matchesWord(titleText,w)).length;
+  const textCount=words.filter(w=>matchesWord(bodyText,w)).length;
+  if(titleCount===words.length)return 120;
+  if(phrasePattern.test(titleText))return 110;
+  if(phrasePattern.test(bodyText))return 90;
+  // Todos os termos precisam aparecer na mesma passagem curta, não em pontos dispersos.
+  if(textCount!==words.length)return 0;
+  for(const first of words){
+    const re=new RegExp('(^|[^a-z0-9])'+first+'([^a-z0-9]|$)','g');
+    for(const found of bodyText.matchAll(re)){
+      const pos=found.index;
+      const passage=bodyText.slice(Math.max(0,pos-65),pos+130);
+      if(words.every(w=>matchesWord(passage,w)))return 45;
+    }
+  }
+  return 0;
 }
 function brief(text,words){
   const start=text.slice(0,1500);
@@ -108,8 +132,8 @@ export async function liveArticles(question,{request=fetch,checkRobots=true}={})
       if(results.length)break;
     }
     results=[...new Map(results.map(x=>[x.id,x])).values()]
-      .sort((a,b)=>Number(containsRelevant(a.title,words))-Number(containsRelevant(b.title,words))||a.id-b.id)
-      .reverse().slice(0,5);
+      .sort((a,b)=>Number(words.every(w=>matchesWord(normalized(b.title),w)))-Number(words.every(w=>matchesWord(normalized(a.title),w)))||a.id-b.id)
+      .slice(0,8);
     const posts=await Promise.allSettled(results.map(async item=>{
       const endpoint=HOST+postPath+item.id+'?_fields=id,link,title,content,status';
       const response=await remote(request,endpoint);
@@ -118,10 +142,14 @@ export async function liveArticles(question,{request=fetch,checkRobots=true}={})
       const body=textFromWordPress(post?.content?.rendered||'');
       const url=post?.link||item.url;
       if(!safeArticleUrl(url)||post?.status!=='publish'||body.length<250||title.length<5)return null;
-      if(!containsRelevant(title+' '+body,words))return null;
-      return {title,url,body:brief(body,words)};
+      const score=relevanceScore(title,body,words);
+      if(score===0)return null;
+      return {title,url,body:brief(body,words),score};
     }));
-    const rows=posts.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).slice(0,4);
+    const candidates=posts.filter(x=>x.status==='fulfilled'&&x.value).map(x=>x.value).sort((a,b)=>b.score-a.score);
+    // Menções incidentais não devem virar fonte se existem artigos especificamente sobre o tema.
+    const minScore=candidates[0]?.score>=90?90:45;
+    const rows=candidates.filter(x=>x.score>=minScore).slice(0,4).map(({score,...row})=>row);
     return {rows,status:rows.length?'ok':'empty'};
   }catch(error){
     console.warn('Live search Morte Súbita unavailable:',String(error).slice(0,160));
