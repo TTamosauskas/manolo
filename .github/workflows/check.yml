@@ -59,3 +59,18 @@ jobs:
             }catch(e){console.log(JSON.stringify({path,error:String(e)}));}
           }
           NODE
+      - name: Validar Surpreenda-me com artigo público e resposta real
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const endpoint='https://manolo.mvividvs.workers.dev/api/chat';
+          const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Origin':'https://ttamosauskas.github.io'},body:JSON.stringify({action:'surprise'}),signal:AbortSignal.timeout(45000)});
+          const data=await response.json();
+          const source=data.sources?.[0];
+          const valid=source&&new URL(source.url).hostname==='mortesubita.net';
+          const generated=(data.message||'').split('**Fontes — mortesubita.net:**')[0];
+          console.log(JSON.stringify({status:response.status,mode:data.mode,sources:data.sources?.length||0,sourceTitle:source?.title,sourceUrl:source?.url,textLength:generated.length}));
+          if(!response.ok||!valid||!data.message?.includes('Surpreenda-me:')||generated.length<110)
+            throw new Error('Surpreenda-me não retornou texto gerado com fonte válida');
+          console.log('Surpreenda-me validado com IA real e artigo público.');
+          NODE
